@@ -46,7 +46,7 @@ func startCmd() *cobra.Command {
 			})
 
 			// Start server
-			addr := fmt.Sprintf(":%d", 8080)
+			addr := fmt.Sprintf(":%d", 80)
 			//logger.Infof("Start listening on %s", addr)
 			return http.ListenAndServe(addr, r)
 		},
