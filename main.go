@@ -87,6 +87,7 @@ func startCmd(cfg config.AppConfig) *cobra.Command {
 			// Start server
 			addr := fmt.Sprintf(":%d", cfg.API.Port)
 			//logger.Infof("Start listening on %s", addr)
+			fmt.Printf("Start listening on %d", cfg.API.Port)
 			return http.ListenAndServe(addr, r)
 		},
 	}

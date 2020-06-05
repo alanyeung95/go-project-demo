@@ -17,23 +17,24 @@ ifneq ($(MONGO_VOLUME_EXIST), 1)
 	docker volume create $(MONGO_VOLUME)
 endif
 
-.PHONY: mongo-up
-mongo-up: mongo
-	@echo ">>> compose-up Go Project Demo MongoDB"
-	docker-compose -f docker-compose.mongo.yml up -d
+#.PHONY: mongo-up
+#mongo-up: mongo
+#	@echo ">>> compose-up Go Project Demo MongoDB"
+#	docker-compose -f docker-compose.mongo.yml up -d
 
-.PHONY: mongo-down
-mongo-down:
-	@echo ">>> compose-down Go Project Demo MongoDB"
-	docker-compose -f docker-compose.mongo.yml down
+#.PHONY: mongo-down
+#mongo-down:
+#	@echo ">>> compose-down Go Project Demo MongoDB"
+#	docker-compose -f docker-compose.mongo.yml down
 
 ### Development
-.PHONY: up
-up:  mongo-up
-	@echo ">>> Ensure compose up"
-	docker-compose up --build -d
+#.PHONY: up
+#up: #mongo-up
+#	@echo ">>> Ensure compose up"
+#	docker-compose up --build -d
 
 .PHONY: run
-run: up
-	@echo ">>> run"
-	docker-compose exec $(MAIN) sh -c  './scripts/start.sh'
+run:
+	@echo ">>> Starting API server"
+	go run main.go start
+	#docker-compose exec $(MAIN) sh -c  './scripts/start.sh'

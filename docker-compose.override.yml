@@ -1,0 +1,17 @@
+# this file will override set config in docker-compose.yml, by file name convention
+version: "3.7"
+services:
+  app:
+    volumes:
+      - .:/app
+      - go-mod-cache:/go/pkg/mod
+    command: sh -c './scripts/wait-for.sh mongo:27017 -- make run'
+  mongo:
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo:/data/db
+
+volumes:
+  go-mod-cache:
+  mongo:

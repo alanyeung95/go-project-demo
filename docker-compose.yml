@@ -14,16 +14,28 @@ services:
       - "8080:80"
     volumes:
       - .:/app
-      - go-mod-cache:/go/pkg/mod
     command: tail -f /dev/null
     environment:
       - API_PORT=80
       - API_REQUEST_LOG=true
       - LOG_FORMAT=json
-
-volumes:
+      - MONGODB_ADDRESSES=mongo:27017
+      - MONGODB_DATABASE=domain
+      - MONGODB_USERNAME=user
+      - MONGODB_PASSWORD=password
+      - MONGODB_REPLICATE_SET=rs
   mongo:
-  go-mod-cache:
+    image: mongo:4.2
+    volumes:
+      - ./scripts:/scripts
+    environment:
+      - MONGODB_ADDRESSES=mongo:27017
+      - MONGODB_DATABASE=domain
+      - MONGODB_USERNAME=user
+      - MONGODB_PASSWORD=password
+      - MONGODB_REPLICATE_SET=rs
+    entrypoint: ["scripts/mongo-setup.sh"]
+          
 #secrets:
 #  netrc:
 #    file: ~/.netrc
