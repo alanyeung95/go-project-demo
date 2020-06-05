@@ -8,10 +8,12 @@ import (
 	"github.com/go-chi/chi"
 	//	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	mongodriver "go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/alanyeung95/GoProjectDemo/pkg/config"
 	"github.com/alanyeung95/GoProjectDemo/pkg/demo"
 	"github.com/alanyeung95/GoProjectDemo/pkg/items"
+	"github.com/alanyeung95/GoProjectDemo/pkg/mongo"
 )
 
 func main() {
@@ -52,12 +54,23 @@ func startCmd(cfg config.AppConfig) *cobra.Command {
 		Short: "Start Server",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
+			mongoClient, err := mongo.NewClient(
+				cfg.MongoDB.Addresses,
+				cfg.MongoDB.Username,
+				cfg.MongoDB.Password,
+				cfg.MongoDB.Database,
+			)
+
+			if err != nil {
+				return err
+			}
+
 			demoSrv, err := newDemoSrv()
 			if err != nil {
 				return err
 			}
 
-			itemSrv, err := newItemSrv()
+			itemSrv, err := newItemSrv(cfg, mongoClient)
 			if err != nil {
 				return err
 			}
@@ -88,14 +101,15 @@ func newDemoSrv() (demo.Service, error) {
 	return demoSrv, nil
 }
 
-func newItemSrv() (items.Service, error) {
-	//func newItemSrv( client *mongodriver.Client,) ( items.Service, error) {
-	//itemRepository, err := mongo.NewPageRepository(client, cfg.MongoDB.Database, cfg.MongoDB.NewsItemCollection, cfg.MongoDB.PubHistoryCollection, cfg.MongoDB.EnableSharding)
-	//if err != nil {
-	//		return nil, nil, err
-	//}
+//func newItemSrv() (items.Service, error) {
+func newItemSrv(cfg config.AppConfig, client *mongodriver.Client) (items.Service, error) {
+	itemRepository, err := mongo.NewItemRepository(client, cfg.MongoDB.Database, cfg.MongoDB.ItemCollection, cfg.MongoDB.EnableSharding)
 
-	itemSrv, err := items.NewService()
+	if err != nil {
+		return nil, err
+	}
+
+	itemSrv, err := items.NewService(itemRepository)
 	if err != nil {
 		return nil, err
 	}

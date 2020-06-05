@@ -8,4 +8,5 @@ require (
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/viper v1.4.0
+	go.mongodb.org/mongo-driver v1.3.4
 )
