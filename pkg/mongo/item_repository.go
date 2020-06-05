@@ -26,10 +26,25 @@ type ItemRepository struct {
 
 var _ items.Repository = (*ItemRepository)(nil)
 
-func (r *ItemRepository) Find(ctx context.Context, id string) (bson.Raw, error) {
-	// todo: return model rather than raw bson
-	//	func (r *ItemRepository) Find(ctx context.Context, id string) (interface{}, error) {
+// Upsert returns the item record being successfully created or updated
+func (r *ItemRepository) Upsert(ctx context.Context, id string, item items.Item) (*items.Item, error) {
+	var result items.Item
+	filter := bson.M{"id": "test_id"}
+	update := bson.M{
+		"$set": bson.M{
+			"id":    "test_id",
+			"name":  "test_name",
+			"price": 123,
+		},
+	}
+	if err := upsert(ctx, r.collection, filter, update, &result); err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
 
+// Find returns an item record
+func (r *ItemRepository) Find(ctx context.Context, id string) (interface{}, error) {
 	filter := bson.M{"_id": id}
 	result, err := r.collection.FindOne(ctx, filter).DecodeBytes()
 	if err != nil {
@@ -39,11 +54,23 @@ func (r *ItemRepository) Find(ctx context.Context, id string) (bson.Raw, error) 
 		return nil, err
 	}
 
-	//return unmarshalToModel(result)
-	return result, nil
+	return unmarshalToModel(result)
 }
 
+// Update returns the item record being successfully updated
 func (r *ItemRepository) Update(ctx context.Context, id string, model interface{}) error {
 	filter := bson.M{"_id": id}
 	return replaceOne(ctx, r.collection, filter, model)
+}
+
+func unmarshalToModel(data bson.Raw) (interface{}, error) {
+	var model items.Item
+	if err := unmarshalBson(data, &model); err != nil {
+		return nil, err
+	}
+	return model, nil
+}
+
+func unmarshalBson(data bson.Raw, val interface{}) error {
+	return bson.Unmarshal(data, val)
 }

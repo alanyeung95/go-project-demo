@@ -29,6 +29,7 @@ func (config *AppConfig) LoadFromEnv() error {
 	v.BindEnv("mongodb.username", "MONGODB_USERNAME")
 	v.BindEnv("mongodb.password", "MONGODB_PASSWORD")
 	v.BindEnv("mongodb.database", "MONGODB_DATABASE")
+	v.BindEnv("mongodb.itemCollection", "MONGODB_ITEM_COLLECTION")
 
 	err := v.Unmarshal(&config)
 

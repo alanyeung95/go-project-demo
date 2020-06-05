@@ -1,14 +1,10 @@
 package items
 
-import (
-	"context"
+import "context"
 
-	"go.mongodb.org/mongo-driver/bson"
-)
-
+// Repository is the item repo
 type Repository interface {
-	Find(ctx context.Context, id string) (bson.Raw, error)
-	// todo
-	//Find(ctx context.Context, id string) (interface{}, error)
+	Upsert(ctx context.Context, id string, item Item) (*Item, error)
+	Find(ctx context.Context, id string) (interface{}, error)
 	Update(ctx context.Context, id string, model interface{}) error
 }

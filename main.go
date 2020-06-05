@@ -80,7 +80,7 @@ func startCmd(cfg config.AppConfig) *cobra.Command {
 
 			// Route - API
 			r.Route("/", func(r chi.Router) {
-				r.Mount("/", items.NewHandler(demoSrv))
+				r.Mount("/", demo.NewHandler(demoSrv))
 				r.Mount("/items", items.NewHandler(itemSrv))
 			})
 
