@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi"
+	kithttp "github.com/go-kit/kit/transport/http"
 )
 
 // NewHandler return handler that serves the items service
@@ -26,12 +27,10 @@ func (h *handlers) handleGetItemsSample(w http.ResponseWriter, r *http.Request) 
 func (h *handlers) handleCreateItem(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	_, err := h.svc.CreateItem(ctx, r)
+	response, err := h.svc.CreateItem(ctx, r)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	//encoder.EncodeJSONResponse(ctx, w, resp)
-
-	w.Write([]byte("Created item succesfully!!!"))
+	kithttp.EncodeJSONResponse(ctx, w, response)
 }
