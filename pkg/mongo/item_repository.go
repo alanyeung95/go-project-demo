@@ -24,12 +24,13 @@ type ItemRepository struct {
 	collection *mongo.Collection
 }
 
+// interface check
 var _ items.Repository = (*ItemRepository)(nil)
 
 // Upsert returns the item record being successfully created or updated
 func (r *ItemRepository) Upsert(ctx context.Context, id string, item items.Item) (*items.Item, error) {
 	var result items.Item
-	filter := bson.M{"id": id}
+	filter := bson.M{"_id": id}
 	update := bson.M{
 		"$set": item,
 	}
@@ -40,17 +41,16 @@ func (r *ItemRepository) Upsert(ctx context.Context, id string, item items.Item)
 }
 
 // Find returns an item record
-func (r *ItemRepository) Find(ctx context.Context, id string) (interface{}, error) {
+func (r *ItemRepository) Find(ctx context.Context, id string) (*items.Item, error) {
+	var result items.Item
 	filter := bson.M{"_id": id}
-	result, err := r.collection.FindOne(ctx, filter).DecodeBytes()
-	if err != nil {
+	if err := r.collection.FindOne(ctx, filter).Decode(&result); err != nil {
 		if err == mongo.ErrNoDocuments {
 			return nil, errors.NewResourceNotFound(err)
 		}
 		return nil, err
 	}
-
-	return unmarshalToModel(result)
+	return &result, nil
 }
 
 // Update returns the item record being successfully updated
@@ -59,6 +59,7 @@ func (r *ItemRepository) Update(ctx context.Context, id string, model interface{
 	return replaceOne(ctx, r.collection, filter, model)
 }
 
+/**
 func unmarshalToModel(data bson.Raw) (interface{}, error) {
 	var model items.Item
 	if err := unmarshalBson(data, &model); err != nil {
@@ -70,3 +71,4 @@ func unmarshalToModel(data bson.Raw) (interface{}, error) {
 func unmarshalBson(data bson.Raw, val interface{}) error {
 	return bson.Unmarshal(data, val)
 }
+**/

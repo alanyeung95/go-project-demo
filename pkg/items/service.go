@@ -10,6 +10,7 @@ import (
 // Service interface
 type Service interface {
 	CreateItem(ctx context.Context, r *http.Request, item *Item) (*Item, error)
+	GetItemByID(ctx context.Context, r *http.Request, id string) (*Item, error)
 }
 
 type service struct {
@@ -25,4 +26,8 @@ func (s *service) CreateItem(ctx context.Context, r *http.Request, item *Item) (
 	var newID = uuid.NewV4().String()
 	item.ID = newID
 	return s.repository.Upsert(ctx, newID, *item)
+}
+
+func (s *service) GetItemByID(ctx context.Context, r *http.Request, id string) (*Item, error) {
+	return s.repository.Find(ctx, id)
 }

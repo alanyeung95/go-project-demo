@@ -2,7 +2,6 @@ package items
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/alanyeung95/GoProjectDemo/pkg/errors"
@@ -24,27 +23,32 @@ type handlers struct {
 }
 
 func (h *handlers) handleGetItemsSample(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello World!!!"))
+	ctx := r.Context()
+	id := chi.URLParam(r, "id")
+
+	response, err := h.svc.GetItemByID(ctx, r, id)
+	if err != nil {
+		kithttp.DefaultErrorEncoder(ctx, errors.NewBadRequest(err), w)
+		return
+	}
+
+	kithttp.EncodeJSONResponse(ctx, w, response)
 }
 
 func (h *handlers) handleCreateItem(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	var model Item
-	fmt.Printf("%+v\n", r.Body)
-
 	if err := json.NewDecoder(r.Body).Decode(&model); err != nil {
 		kithttp.DefaultErrorEncoder(ctx, errors.NewBadRequest(err), w)
 		return
 	}
-
-	// Note:
-	// fmt.Printf("%+v\n", model)
 
 	response, err := h.svc.CreateItem(ctx, r, &model)
 	if err != nil {
 		kithttp.DefaultErrorEncoder(ctx, errors.NewBadRequest(err), w)
 		return
 	}
+
 	kithttp.EncodeJSONResponse(ctx, w, response)
 }
