@@ -5,6 +5,7 @@ This project is for demonstrating go project purpose
 
 - [x] Create item API
 - [x] Get item API
-- [ ] Provide swagger 
+- [x] Provide swagger 
 - [ ] Add sentry to monitor error (may be)
+- [ ] MongoDB indexing
 - [ ] Go test

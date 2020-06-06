@@ -1,0 +1,116 @@
+openapi: 3.0.0
+
+info:
+  title: API document for Go Demo Project
+  version: 1.0.0
+    
+servers:
+  - url: http://localhost:{port}
+
+security:
+  - CookieAuth: []
+  - AccessTokenAuth: []
+
+paths:
+  /:        
+    post:
+      tags:
+        - "Item"
+      summary: Create an new item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Item"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /{id}:
+    get:
+      tags:
+        - "Item"
+      summary: Get an item by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+components:
+  schemas:
+    Item:
+      description: Demo object
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string               
+        price:
+          type: integer       
+        components:
+          type: array
+          items:
+            $ref: "#/components/schemas/Component"
+    Component:
+      description: Component item
+      type: object
+      properties:        
+        name:
+          type: string        
+    Error:
+      description: An error information
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: integer
+        status:
+          type: integer
+        message:
+          type: string
+        info:
+          description: Extra information related to the error
+          type: object
+          
+  securitySchemes:
+    AccessTokenAuth:
+      type: apiKey
+      in: header
+      name: X-Access-Token
+    CookieAuth:
+      type: apiKey
+      in: cookie
+      name: TOKEN
+      
+  responses:
+    BadRequest:
+      description: The format of request is not correct
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: The format of request is correct, but the resource requested cannot be found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
