@@ -1,5 +1,5 @@
 # GoProjectDemo
-This project is for demo go project purpose
+This project is for demonstrating go project purpose
 
 ## Todo list:
 
