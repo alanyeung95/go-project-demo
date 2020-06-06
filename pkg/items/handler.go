@@ -1,8 +1,11 @@
 package items
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 
+	"github.com/alanyeung95/GoProjectDemo/pkg/errors"
 	"github.com/go-chi/chi"
 	kithttp "github.com/go-kit/kit/transport/http"
 )
@@ -11,8 +14,8 @@ import (
 func NewHandler(srv Service) http.Handler {
 	h := handlers{srv}
 	r := chi.NewRouter()
-	r.Get("/", h.handleGetItemsSample)
-	r.Post("/{id}", h.handleCreateItem)
+	r.Get("/{id}", h.handleGetItemsSample)
+	r.Post("/", h.handleCreateItem)
 	return r
 }
 
@@ -27,9 +30,20 @@ func (h *handlers) handleGetItemsSample(w http.ResponseWriter, r *http.Request) 
 func (h *handlers) handleCreateItem(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	response, err := h.svc.CreateItem(ctx, r)
+	var model Item
+	fmt.Printf("%+v\n", r.Body)
+
+	if err := json.NewDecoder(r.Body).Decode(&model); err != nil {
+		kithttp.DefaultErrorEncoder(ctx, errors.NewBadRequest(err), w)
+		return
+	}
+
+	// Note:
+	// fmt.Printf("%+v\n", model)
+
+	response, err := h.svc.CreateItem(ctx, r, &model)
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		kithttp.DefaultErrorEncoder(ctx, errors.NewBadRequest(err), w)
 		return
 	}
 	kithttp.EncodeJSONResponse(ctx, w, response)

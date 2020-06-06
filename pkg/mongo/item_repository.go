@@ -29,13 +29,9 @@ var _ items.Repository = (*ItemRepository)(nil)
 // Upsert returns the item record being successfully created or updated
 func (r *ItemRepository) Upsert(ctx context.Context, id string, item items.Item) (*items.Item, error) {
 	var result items.Item
-	filter := bson.M{"id": "test_id"}
+	filter := bson.M{"id": id}
 	update := bson.M{
-		"$set": bson.M{
-			"id":    "test_id",
-			"name":  "test_name",
-			"price": 123,
-		},
+		"$set": item,
 	}
 	if err := upsert(ctx, r.collection, filter, update, &result); err != nil {
 		return nil, err
