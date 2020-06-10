@@ -52,6 +52,26 @@ paths:
                 $ref: "#/components/schemas/Item"
         "404":
           $ref: "#/components/responses/NotFound"
+  /{id}/raw:
+    get:
+      tags:
+        - "Item"
+      summary: Get an item text file by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                example: "ID: e200e685-2da8-4470-b848-59f363a526b2\nName: test-name-1\nPrice: 234"
+        "404":
+          $ref: "#/components/responses/NotFound"          
 
 components:
   schemas:

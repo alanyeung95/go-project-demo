@@ -15,6 +15,7 @@ func NewHandler(srv Service) http.Handler {
 	r := chi.NewRouter()
 	r.Get("/{id}", h.handleGetItemsSample)
 	r.Post("/", h.handleCreateItem)
+	r.Get("/{id}/raw", h.handleGetItemTextByID)
 	return r
 }
 
@@ -51,4 +52,17 @@ func (h *handlers) handleCreateItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	kithttp.EncodeJSONResponse(ctx, w, response)
+}
+
+func (h *handlers) handleGetItemTextByID(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	id := chi.URLParam(r, "id")
+
+	response, err := h.svc.GetItemTextByID(ctx, r, id)
+	if err != nil {
+		kithttp.DefaultErrorEncoder(ctx, errors.NewBadRequest(err), w)
+		return
+	}
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Write([]byte(response))
 }
