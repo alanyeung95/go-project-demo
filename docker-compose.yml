@@ -30,7 +30,7 @@ services:
     volumes:
       - ./scripts:/scripts
     environment:
-      - MONGODB_ADDRESSES=mongo:27017
+      - MONGODB_ADDRESSES=mongo.demo.network:27017
       - MONGODB_DATABASE=domain
       - MONGODB_USERNAME=user
       - MONGODB_PASSWORD=password
@@ -41,3 +41,7 @@ services:
 #secrets:
 #  netrc:
 #    file: ~/.netrc
+networks:
+  default:
+    external:     
+      name: demo.network

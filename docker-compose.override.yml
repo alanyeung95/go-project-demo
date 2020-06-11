@@ -5,7 +5,7 @@ services:
     volumes:
       - .:/app
       - go-mod-cache:/go/pkg/mod
-    command: sh -c './scripts/wait-for.sh mongo:27017 -- make run'
+    command: sh -c './scripts/wait-for.sh mongo.demo.network:27017 -- make run'
   mongo:
     ports:
       - "27017:27017"
@@ -15,3 +15,8 @@ services:
 volumes:
   go-mod-cache:
   mongo:
+
+networks:
+  default:
+    external:     
+      name: demo.network

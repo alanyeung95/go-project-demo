@@ -64,5 +64,6 @@ func (h *handlers) handleGetItemTextByID(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Header().Set("Content-Disposition", "attachment; filename="+id)
 	w.Write([]byte(response))
 }
