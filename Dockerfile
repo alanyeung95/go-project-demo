@@ -9,6 +9,7 @@ RUN apk add --no-cache git gcc g++ make
 # Directory inside container
 WORKDIR /app
 
+# Copy host file to /app inside container
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
