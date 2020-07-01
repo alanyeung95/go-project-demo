@@ -14,3 +14,8 @@ type MongoDB struct {
 	ItemCollection string
 	EnableSharding bool
 }
+
+// Sentry config
+type Sentry struct {
+	DSN string
+}

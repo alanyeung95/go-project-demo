@@ -2,11 +2,15 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
+	"github.com/getsentry/sentry-go"
 	"github.com/go-chi/chi"
+
 	//	"github.com/sirupsen/logrus"
+
 	"github.com/spf13/cobra"
 	mongodriver "go.mongodb.org/mongo-driver/mongo"
 
@@ -22,6 +26,8 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+	initSentry(cfg)
 
 	fmt.Println("Starting server...")
 	rootCmd := &cobra.Command{
@@ -46,6 +52,15 @@ func loadConfig() (config.AppConfig, error) {
 	}
 
 	return cfg, nil
+}
+
+func initSentry(cfg config.AppConfig) {
+	err := sentry.Init(sentry.ClientOptions{
+		Dsn: cfg.Sentry.DSN,
+	})
+	if err != nil {
+		log.Fatalf("sentry.Init: %s", err)
+	}
 }
 
 func startCmd(cfg config.AppConfig) *cobra.Command {
