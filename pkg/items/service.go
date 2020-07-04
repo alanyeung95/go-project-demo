@@ -22,8 +22,8 @@ type service struct {
 }
 
 // NewService start the new service
-func NewService(repository Repository) (Service, error) {
-	return &service{repository}, nil
+func NewService(repository Repository) Service {
+	return &service{repository}
 }
 
 func (s *service) CreateItem(ctx context.Context, r *http.Request, item *Item) (*Item, error) {

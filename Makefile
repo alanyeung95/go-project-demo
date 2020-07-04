@@ -38,3 +38,15 @@ run:
 	@echo ">>> Starting API server"
 	go run main.go start
 	#docker-compose exec $(MAIN) sh -c  './scripts/start.sh'
+
+.PHONY: test
+test:
+	@echo Running go test
+	go test -coverprofile=coverage.out ./...
+
+
+.PHONY: cover
+cover: test
+	@echo Running go coverage
+	go tool cover -func=coverage.out
+	go tool cover -html=coverage.out -o coverage.html

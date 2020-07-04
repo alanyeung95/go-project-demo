@@ -16,8 +16,8 @@ type service struct {
 }
 
 // NewService start the new service
-func NewService() (Service, error) {
-	return &service{}, nil
+func NewService() Service {
+	return &service{}
 }
 
 func (s *service) DemoError(ctx context.Context) error {

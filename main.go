@@ -109,10 +109,7 @@ func startCmd(cfg config.AppConfig) *cobra.Command {
 }
 
 func newDemoSrv() (demo.Service, error) {
-	demoSrv, err := demo.NewService()
-	if err != nil {
-		return nil, err
-	}
+	demoSrv := demo.NewService()
 
 	return demoSrv, nil
 }
@@ -125,10 +122,7 @@ func newItemSrv(cfg config.AppConfig, client *mongodriver.Client) (items.Service
 		return nil, err
 	}
 
-	itemSrv, err := items.NewService(itemRepository)
-	if err != nil {
-		return nil, err
-	}
+	itemSrv := items.NewService(itemRepository)
 
 	return itemSrv, nil
 }
