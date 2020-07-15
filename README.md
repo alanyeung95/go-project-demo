@@ -2,6 +2,18 @@
 
 This project is for demonstrating go project purpose
 
+This repo is one of the microservices. Other related repo is <b> ElasticSearchDemo </b> and <b>vue-project-demo</b> 
+
+Please setup the project under this order:
+1. GoProjectDemo
+2. ElasticSearchDemo
+3. vue-project-demo
+
+## Quick usage
+```
+docker-compose up
+```
+
 ## Todo list:
 
 - [x] Create item API
