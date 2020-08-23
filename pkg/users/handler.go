@@ -16,6 +16,7 @@ func NewHandler(srv Service) http.Handler {
 	r := chi.NewRouter()
 	r.Get("/{id}", h.handleGetUser)
 	r.Post("/", h.handleCreateUser)
+	r.Post("/login", h.handleUserLogin)
 	return r
 }
 
@@ -48,6 +49,24 @@ func (h *handlers) handleCreateUser(w http.ResponseWriter, r *http.Request) {
 	response, err := h.svc.CreateUser(ctx, r, &model)
 	if err != nil {
 		kithttp.DefaultErrorEncoder(ctx, errors.NewBadRequest(err), w)
+		return
+	}
+
+	kithttp.EncodeJSONResponse(ctx, w, response)
+}
+
+func (h *handlers) handleUserLogin(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var request UserLoginParam
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		kithttp.DefaultErrorEncoder(ctx, errors.NewBadRequest(err), w)
+		return
+	}
+
+	response, err := h.svc.UserLogin(ctx, r, &request)
+	if err != nil {
+		kithttp.DefaultErrorEncoder(ctx, err, w)
 		return
 	}
 

@@ -8,4 +8,5 @@ import "context"
 type Repository interface {
 	Upsert(ctx context.Context, id string, user User) (*User, error)
 	Find(ctx context.Context, id string) (*User, error)
+	FindByEmail(ctx context.Context, email string) (*User, error)
 }

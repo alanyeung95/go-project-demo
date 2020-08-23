@@ -52,3 +52,16 @@ func (r *UserRepository) Find(ctx context.Context, id string) (*users.User, erro
 	}
 	return &result, nil
 }
+
+// FindByEmail returns an User record
+func (r *UserRepository) FindByEmail(ctx context.Context, email string) (*users.User, error) {
+	var result users.User
+	filter := bson.M{"email": email}
+	if err := r.collection.FindOne(ctx, filter).Decode(&result); err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errors.NewResourceNotFound(err)
+		}
+		return nil, err
+	}
+	return &result, nil
+}
