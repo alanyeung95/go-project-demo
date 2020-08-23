@@ -15,4 +15,5 @@ require (
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/viper v1.4.0
 	go.mongodb.org/mongo-driver v1.3.4
+	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
 )
