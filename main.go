@@ -18,6 +18,7 @@ import (
 	"github.com/alanyeung95/GoProjectDemo/pkg/demo"
 	"github.com/alanyeung95/GoProjectDemo/pkg/items"
 	"github.com/alanyeung95/GoProjectDemo/pkg/mongo"
+	"github.com/alanyeung95/GoProjectDemo/pkg/users"
 )
 
 func main() {
@@ -90,6 +91,11 @@ func startCmd(cfg config.AppConfig) *cobra.Command {
 				return err
 			}
 
+			userSrv, err := newUserSrv(cfg, mongoClient)
+			if err != nil {
+				return err
+			}
+
 			// Route - Middlewares
 			r := chi.NewRouter()
 
@@ -97,6 +103,7 @@ func startCmd(cfg config.AppConfig) *cobra.Command {
 			r.Route("/", func(r chi.Router) {
 				r.Mount("/", demo.NewHandler(demoSrv))
 				r.Mount("/items", items.NewHandler(itemSrv))
+				r.Mount("/users", users.NewHandler(userSrv))
 			})
 
 			// Start server
@@ -114,7 +121,6 @@ func newDemoSrv() (demo.Service, error) {
 	return demoSrv, nil
 }
 
-//func newItemSrv() (items.Service, error) {
 func newItemSrv(cfg config.AppConfig, client *mongodriver.Client) (items.Service, error) {
 	itemRepository, err := mongo.NewItemRepository(client, cfg.MongoDB.Database, cfg.MongoDB.ItemCollection, cfg.MongoDB.EnableSharding)
 
@@ -125,4 +131,16 @@ func newItemSrv(cfg config.AppConfig, client *mongodriver.Client) (items.Service
 	itemSrv := items.NewService(itemRepository)
 
 	return itemSrv, nil
+}
+
+func newUserSrv(cfg config.AppConfig, client *mongodriver.Client) (users.Service, error) {
+	userRepository, err := mongo.NewUserRepository(client, cfg.MongoDB.Database, cfg.MongoDB.UserCollection, cfg.MongoDB.EnableSharding)
+
+	if err != nil {
+		return nil, err
+	}
+
+	userSrv := users.NewService(userRepository)
+
+	return userSrv, nil
 }

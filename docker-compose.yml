@@ -27,6 +27,7 @@ services:
       - MONGODB_PASSWORD=password
       - MONGODB_REPLICATE_SET=rs
       - MONGODB_ITEM_COLLECTION=items
+      - MONGODB_USER_COLLECTION=users
   mongo:
     image: mongo:4.2
     volumes:
@@ -37,7 +38,6 @@ services:
       - MONGODB_USERNAME=user
       - MONGODB_PASSWORD=password
       - MONGODB_REPLICATE_SET=rs
-      - MONGODB_ITEM_COLLECTION=items
     entrypoint: ["scripts/mongo-setup.sh"]
 
 #secrets:

@@ -12,6 +12,7 @@ type MongoDB struct {
 	Password       string
 	Database       string
 	ItemCollection string
+	UserCollection string
 	EnableSharding bool
 }
 

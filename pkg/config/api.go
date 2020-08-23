@@ -31,6 +31,7 @@ func (config *AppConfig) LoadFromEnv() error {
 	v.BindEnv("mongodb.password", "MONGODB_PASSWORD")
 	v.BindEnv("mongodb.database", "MONGODB_DATABASE")
 	v.BindEnv("mongodb.itemCollection", "MONGODB_ITEM_COLLECTION")
+	v.BindEnv("mongodb.userCollection", "MONGODB_USER_COLLECTION")
 
 	v.BindEnv("sentry.dsn", "SENTRY_DSN")
 
