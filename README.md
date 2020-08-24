@@ -24,7 +24,7 @@ docker-compose up
 - [x] Add sentry to monitor error (may be)
 - [ ] MongoDB indexing
 - [x] Gomock test
-- [ ] User auth with JWT
+- [x] User auth with JWT
 
 ## Useful information
 
