@@ -8,6 +8,7 @@ import (
 
 	"github.com/getsentry/sentry-go"
 	"github.com/go-chi/chi"
+	"github.com/urfave/negroni"
 
 	//	"github.com/sirupsen/logrus"
 
@@ -17,6 +18,7 @@ import (
 	"github.com/alanyeung95/GoProjectDemo/pkg/config"
 	"github.com/alanyeung95/GoProjectDemo/pkg/demo"
 	"github.com/alanyeung95/GoProjectDemo/pkg/items"
+	"github.com/alanyeung95/GoProjectDemo/pkg/middleware"
 	"github.com/alanyeung95/GoProjectDemo/pkg/mongo"
 	"github.com/alanyeung95/GoProjectDemo/pkg/users"
 )
@@ -96,13 +98,18 @@ func startCmd(cfg config.AppConfig) *cobra.Command {
 				return err
 			}
 
+			jwtMiddleware := middleware.NewJwtMiddleware()
+
 			// Route - Middlewares
 			r := chi.NewRouter()
 
 			// Route - API
 			r.Route("/", func(r chi.Router) {
 				r.Mount("/", demo.NewHandler(demoSrv))
-				r.Mount("/items", items.NewHandler(itemSrv))
+				r.Mount("/items", negroni.New(
+					negroni.HandlerFunc(jwtMiddleware.HandlerWithNext),
+					negroni.Wrap(items.NewHandler(itemSrv)),
+				))
 				r.Mount("/users", users.NewHandler(userSrv))
 			})
 

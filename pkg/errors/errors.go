@@ -47,6 +47,13 @@ func NewResourceNotFound(err error) Error {
 	}
 }
 
+func NewServerError(err error) Error {
+	return &genericError{
+		code:    ServerError,
+		message: err.Error(),
+	}
+}
+
 // genericError is an implementation of Error that contains
 // an code and error message.
 type genericError struct {

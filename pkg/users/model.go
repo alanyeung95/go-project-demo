@@ -13,5 +13,6 @@ type UserLoginParam struct {
 }
 
 type LoginResponse struct {
-	Status bool `json:"status"    bson:"status"`
+	Status bool   `json:"status"    bson:"status"`
+	Token  string `json:"token"    bson:"token"`
 }

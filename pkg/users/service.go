@@ -4,8 +4,11 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
+	"time"
 
 	"github.com/alanyeung95/GoProjectDemo/pkg/errors"
+	"github.com/dgrijalva/jwt-go"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -47,11 +50,30 @@ func (s *service) UserLogin(ctx context.Context, r *http.Request, loginInfo *Use
 	pwdMatch := comparePasswords(user.Password, []byte(loginInfo.Password))
 	if pwdMatch {
 		resp.Status = true
+		token, err := generateJwtToken()
+		if err != nil {
+			return nil, errors.NewServerError(err)
+		}
+		resp.Token = token
 	} else {
 		resp.Status = false
 	}
 
 	return &resp, nil
+}
+
+func generateJwtToken() (string, error) {
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := make(jwt.MapClaims)
+	claims["exp"] = time.Now().Add(time.Hour * time.Duration(1)).Unix()
+	claims["iat"] = time.Now().Unix()
+	token.Claims = claims
+
+	tokenString, err := token.SignedString([]byte(os.Getenv("TOKEN_SECRETKEY")))
+	if err != nil {
+		return "", err
+	}
+	return tokenString, nil
 }
 
 func hashAndSalt(pwd []byte) string {

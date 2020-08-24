@@ -28,6 +28,7 @@ services:
       - MONGODB_REPLICATE_SET=rs
       - MONGODB_ITEM_COLLECTION=items
       - MONGODB_USER_COLLECTION=users
+      - TOKEN_SECRETKEY=secret_key
   mongo:
     image: mongo:4.2
     volumes:
