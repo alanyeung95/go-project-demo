@@ -2,12 +2,12 @@
 
 This project is for demonstrating go project purpose
 
-This repo is one of the microservices. Other related repo is <b>[elasticsearch-monstrache-demo](https://github.com/alanyeung95/elasticsearch-monstrache-demo)</b> and <b>[vue-project-demo](https://github.com/alanyeung95/vue-project-demo)</b>
+This repo is one of the microservices. Other related repo is <b>[elasticsearch-monstache-demo](https://github.com/alanyeung95/elasticsearch-monstache-demo)</b> and <b>[vue-project-demo](https://github.com/alanyeung95/vue-project-demo)</b>
 
 Please setup the project under this order:
 
 1. go-project-demo
-2. elasticsearch-monstrache-demo
+2. elasticsearch-monstache-demo
 3. vue-project-demo
 
 ## Quick usage
