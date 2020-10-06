@@ -12,8 +12,14 @@ Please setup the project under this order:
 
 ## Quick usage
 
+Run the API server
 ```
 docker-compose up
+```
+
+Run unit test
+```
+make cover
 ```
 
 ## Todo list:
