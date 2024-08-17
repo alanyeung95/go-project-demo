@@ -1,0 +1,25 @@
+## Dockerfile is being used to build an image
+
+# Builder
+FROM golang:1.23-alpine3.20 AS builder
+
+# Dependency
+RUN apk add --no-cache git gcc g++ make
+
+# Directory inside container
+WORKDIR /app
+
+# Copy host file to /app inside container
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+COPY . .
+#RUN make build
+RUN go build -o grpcapp ./cmd/grpcapp
+
+# Runner
+FROM  golang:1.23-alpine3.20
+WORKDIR /app
+COPY --from=builder /app/grpcapp .
+CMD ["./grpcapp"]

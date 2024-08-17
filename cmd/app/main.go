@@ -17,6 +17,7 @@ import (
 
 	"github.com/alanyeung95/GoProjectDemo/pkg/config"
 	"github.com/alanyeung95/GoProjectDemo/pkg/demo"
+	"github.com/alanyeung95/GoProjectDemo/pkg/grpc"
 	"github.com/alanyeung95/GoProjectDemo/pkg/items"
 	"github.com/alanyeung95/GoProjectDemo/pkg/middleware"
 	"github.com/alanyeung95/GoProjectDemo/pkg/mongo"
@@ -99,6 +100,11 @@ func startCmd(cfg config.AppConfig) *cobra.Command {
 
 			jwtMiddleware := middleware.NewJwtMiddleware()
 
+			grpcClient, err := grpc.NewGreeterClient(cfg.GRPC.Address) // Adjust the address as needed
+			if err != nil {
+				return err
+			}
+
 			// Route - Middlewares
 			r := chi.NewRouter()
 
@@ -110,6 +116,8 @@ func startCmd(cfg config.AppConfig) *cobra.Command {
 					negroni.Wrap(items.NewHandler(itemSrv)),
 				))
 				r.Mount("/users", users.NewHandler(userSrv))
+				r.Mount("/grpc", grpc.NewHandler(grpcClient))
+
 			})
 
 			// Start server

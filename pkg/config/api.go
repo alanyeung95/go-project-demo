@@ -11,6 +11,7 @@ type AppConfig struct {
 	MongoDB MongoDB
 	Sentry  Sentry
 	v       *viper.Viper
+	GRPC    GRPC
 }
 
 // Validate the config struct
@@ -34,6 +35,8 @@ func (config *AppConfig) LoadFromEnv() error {
 	v.BindEnv("mongodb.userCollection", "MONGODB_USER_COLLECTION")
 
 	v.BindEnv("sentry.dsn", "SENTRY_DSN")
+
+	v.BindEnv("GRPC.address", "GRPC_ADDRESS")
 
 	err := v.Unmarshal(&config)
 

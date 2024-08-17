@@ -20,3 +20,7 @@ type MongoDB struct {
 type Sentry struct {
 	DSN string
 }
+
+type GRPC struct {
+	Address string
+}

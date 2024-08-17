@@ -29,6 +29,7 @@ services:
       - MONGODB_ITEM_COLLECTION=items
       - MONGODB_USER_COLLECTION=users
       - TOKEN_SECRETKEY=secret_key
+      - GRPC_ADDRESS=grpcserver:50051
   mongo:
     image: mongo:4.2
     volumes:
@@ -40,6 +41,13 @@ services:
       - MONGODB_PASSWORD=password
       - MONGODB_REPLICATE_SET=rs
     entrypoint: ["scripts/mongo-setup.sh"]
+
+  grpcserver:
+    build:
+      context: .
+      dockerfile: Dockerfile-grpcserver
+    ports:
+      - "50051:50051"
 
 #secrets:
 #  netrc:
