@@ -71,20 +71,16 @@ func startCmd(cfg config.AppConfig) *cobra.Command {
 		Use:   "start",
 		Short: "Start Server",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			fmt.Print(cfg.MongoDB)
-
 			mongoClient, err := mongo.NewClient(
 				cfg.MongoDB.Addresses,
 				cfg.MongoDB.Username,
 				cfg.MongoDB.Password,
 				cfg.MongoDB.Database,
 			)
-			fmt.Print(cfg.MongoDB)
 
 			if err != nil {
 				return err
 			}
-			fmt.Print(cfg.MongoDB)
 
 			demoSrv, err := newDemoSrv()
 			if err != nil {

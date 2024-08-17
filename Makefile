@@ -36,7 +36,7 @@ endif
 .PHONY: run
 run:
 	@echo ">>> Starting API server"
-	go run main.go start
+	go run cmd/app/main.go start
 	#docker-compose exec $(MAIN) sh -c  './scripts/start.sh'
 
 .PHONY: test

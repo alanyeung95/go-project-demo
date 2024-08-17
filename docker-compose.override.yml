@@ -15,8 +15,3 @@ services:
 volumes:
   go-mod-cache:
   mongo:
-
-networks:
-  default:
-    external:     
-      name: demo.network

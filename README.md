@@ -12,12 +12,16 @@ Please setup the project under this order:
 
 ## Quick usage
 
+### docker compose
+
 Run the API server
+
 ```
 docker-compose up
 ```
 
 Run unit test
+
 ```
 make cover
 ```
@@ -70,4 +74,3 @@ BeZero()
 BeTrue()
 BeFalse()
 ```
-
