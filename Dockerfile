@@ -1,7 +1,7 @@
 ## Dockerfile is being used to build an image
 
 # Builder
-FROM golang:1.13-alpine3.10 AS builder
+FROM golang:1.23-alpine3.20 AS builder
 
 # Dependency
 RUN apk add --no-cache git gcc g++ make
@@ -15,10 +15,11 @@ COPY go.sum .
 RUN go mod download
 
 COPY . .
-RUN make build
+#RUN make build
+RUN go build -o app ./cmd/app
 
 # Runner
-FROM  golang:1.13-alpine3.10
+FROM  golang:1.23-alpine3.20
 WORKDIR /app
 COPY --from=builder /app/GoProjectDemo .
 CMD ["./GoProjectDemo", "start"]
