@@ -1,14 +1,23 @@
 syntax = "proto3";
 
-package proto;
+package helloworld;
 
 // Specify the Go package where the code will be generated.
-option go_package = "github.com/alanyeung95/GoProjectDemo/api/proto";
+option go_package = "github.com/alanyeung95/GoProjectDemo/api/proto/helloworld";
 
 // The greeting service definition.
 service Greeter {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {}
+
+  // Server streaming RPC to send multiple greetings
+  rpc LotsOfReplies(HelloRequest) returns (stream HelloReply) {}
+
+  // Client streaming RPC to send multiple names
+  rpc LotsOfGreetings(stream HelloRequest) returns (HelloReply) {}
+
+  // Bidirectional streaming RPC
+  rpc BidiHello(stream HelloRequest) returns (stream HelloReply) {}
 }
 
 // The request message containing the user's name.

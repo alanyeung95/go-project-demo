@@ -9,11 +9,11 @@ import (
 
 	"google.golang.org/grpc"
 
-	proto "github.com/alanyeung95/GoProjectDemo/api/proto"
+	pb "github.com/alanyeung95/GoProjectDemo/api/proto/helloworld"
 )
 
 type GreeterClient struct {
-	client proto.GreeterClient
+	client pb.GreeterClient
 }
 
 func NewGreeterClient(addr string) (*GreeterClient, error) {
@@ -23,7 +23,7 @@ func NewGreeterClient(addr string) (*GreeterClient, error) {
 	}
 
 	return &GreeterClient{
-		client: proto.NewGreeterClient(conn),
+		client: pb.NewGreeterClient(conn),
 	}, nil
 }
 
@@ -31,12 +31,40 @@ func (gc *GreeterClient) SayHello(name string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	r, err := gc.client.SayHello(ctx, &proto.HelloRequest{Name: name})
+	r, err := gc.client.SayHello(ctx, &pb.HelloRequest{Name: name})
 	if err != nil {
 		return "", fmt.Errorf("could not greet: %v", err)
 	}
 	return r.Message, nil
 }
+
+/*
+func (gc *GreeterClient) LotsOfGreetings() (string, error) {
+	// Create a stream for sending multiple greeting requests
+	stream, err := gc.client.LotsOfGreetings(context.Background())
+	if err != nil {
+		return "", fmt.Errorf("failed to create stream: %v", err)
+	}
+
+	// Iterate over the slice of names and send each as a request
+	for i := 0; i < 1000; i++ {
+		req := &pb.HelloRequest{Name: string(i)}
+		if err := stream.Send(req); err != nil {
+			// Close the stream in case of an error
+			stream.CloseSend()
+			return "", fmt.Errorf("failed to send request: %v", err)
+		}
+	}
+
+	// Close the stream and receive the final response
+	reply, err := stream.CloseAndRecv()
+	if err != nil {
+		return "", fmt.Errorf("failed to receive response: %v", err)
+	}
+
+	return reply.Message, nil
+}
+*/
 
 func (gc *GreeterClient) SayHelloThousandTimes(name string) ([]string, error) {
 	var count = 10000
@@ -52,7 +80,7 @@ func (gc *GreeterClient) SayHelloThousandTimes(name string) ([]string, error) {
 			// create new context for isolation of timeout
 			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
-			response, err := gc.client.SayHello(ctx, &proto.HelloRequest{Name: name})
+			response, err := gc.client.SayHello(ctx, &pb.HelloRequest{Name: name})
 			if err != nil {
 				log.Printf("Error greeting %s: %v", name, err)
 				return
