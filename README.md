@@ -1,4 +1,4 @@
-# GoProjectDemo
+# go-project-demo
 
 This project is for demonstrating go project purpose
 
@@ -74,3 +74,21 @@ BeZero()
 BeTrue()
 BeFalse()
 ```
+
+## Troubleshooting
+
+### DeadlineExceeded
+
+```
+ 2024/08/18 05:35:38 Error greeting aac: rpc error: code = DeadlineExceeded desc = context deadline exceeded
+```
+
+This error message indicates that the operation exceeded the time allowed by the deadline set in the context. This is commonly encountered in network and RPC operations where you've defined a maximum duration that an operation can take, and the operation did not complete within this timeframe.
+
+Common Causes
+
+1. Network Delays: The server might be taking too long to respond due to network latency, or the server itself might be overloaded and thus slow to handle requests.
+
+2. Server Processing Time: The server-side operation might be more time-consuming than anticipated. This could be due to data processing requirements, database access delays, or other computational tasks.
+
+3. Improper Timeout Settings: The client might have set a deadline that is too short for the operation to realistically complete in normal conditions.

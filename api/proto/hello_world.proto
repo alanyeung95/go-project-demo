@@ -14,6 +14,11 @@ service Greeter {
 // The request message containing the user's name.
 message HelloRequest {
   string name = 1;
+  
+  // '1' is the field number, which is a unique number used to identify your field in the message binary format
+  // and should not be changed once your message type is used in communications. 
+  // Field numbers are used to identify fields when the message is serialized (converted to binary) so that it can be efficiently encoded and decoded. 
+  // Each field in a protobuf message must have a unique number.
 }
 
 // The response message containing the greetings

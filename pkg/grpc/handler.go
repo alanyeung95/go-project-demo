@@ -20,8 +20,23 @@ func NewHandler(grpcClient *GreeterClient) http.Handler {
 			return
 		}
 
+		messages := []string{message}
+
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]string{"message": message})
+		json.NewEncoder(w).Encode(map[string][]string{"messages": messages})
+	})
+
+	r.Get("/greetThousandTimes/{name}", func(w http.ResponseWriter, r *http.Request) {
+		name := chi.URLParam(r, "name")
+
+		messages, err := grpcClient.SayHelloThousandTimes(name)
+		if err != nil {
+			http.Error(w, "Failed to greet via gRPC: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string][]string{"messages": messages})
 	})
 
 	return r
