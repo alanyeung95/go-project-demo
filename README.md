@@ -75,6 +75,25 @@ BeTrue()
 BeFalse()
 ```
 
+## Notes
+
+### gRPC
+
+In gRPC with Go, when you use the Protocol Buffers compiler (`protoc`) to generate Go code from `.proto` files, you end up with two types of files:
+
+1. **`helloworld.pb.go`**: This file contains:
+
+   - Struct definitions for each of your Protocol Buffers messages.
+   - Code to encode (marshal) and decode (unmarshal) these messages to and from binary format.
+   - Any enum definitions from your `.proto` file as Go constants.
+   - file_helloworld_proto_rawDesc is the whole `.proto` file in binary format
+
+2. **`helloworld_grpc.pb.go`**: This file is specifically for gRPC and includes:
+   - Client and server interfaces for the gRPC services defined in your `.proto` file.
+   - Code that helps implement these services on the server-side and call them on the client-side.
+
+Essentially, `xxx.pb.go` deals with data structures, while `xxx_grpc.pb.go` handles the communication aspects using those structures in gRPC.
+
 ## Troubleshooting
 
 ### DeadlineExceeded
