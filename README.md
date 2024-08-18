@@ -79,6 +79,14 @@ BeFalse()
 
 ### gRPC
 
+everytime we updated the .proto file, we use this cmd to regenerate interface file
+
+```
+export PATH="$PATH:$(go env GOPATH)/bin"
+cd ../api/proto/helloworld
+protoc --go_out=. --go_opt=paths=source_relative     --go-grpc_out=. --go-grpc_opt=paths=source_relative     helloworld.proto
+```
+
 In gRPC with Go, when you use the Protocol Buffers compiler (`protoc`) to generate Go code from `.proto` files, you end up with two types of files:
 
 1. **`helloworld.pb.go`**: This file contains:
